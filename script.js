@@ -6,112 +6,103 @@ const tileCount = canvas.width / gridSize;
 
 let snake = [{ x: 10, y: 10 }];
 let food = { x: 5, y: 5 };
-let dx = 1; // Horizontal velocity
-let dy = 0; // Vertical velocity
+let dx = 1; 
+let dy = 0; 
 let score = 0;
+let gameInterval;
 
-// Game Loop
 function main() {
     if (hasGameEnded()) {
-        alert(`Game Over! Your score was ${score}`);
+        alert(`Game Over! Score: ${score}`);
         resetGame();
         return;
     }
 
-    setTimeout(function onTick() {
-        clearCanvas();
-        drawFood();
-        moveSnake();
-        drawSnake();
-        main();
-    }, 100);
+    clearCanvas();
+    drawFood();
+    moveSnake();
+    drawSnake();
 }
 
-// Clear the canvas every frame
 function clearCanvas() {
     ctx.fillStyle = "#000";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
-// Draw the snake
 function drawSnake() {
-    ctx.fillStyle = "#4CAF50"; // Green snake
+    ctx.fillStyle = "#4CAF50"; 
     snake.forEach(part => {
         ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 2, gridSize - 2);
     });
 }
 
-// Move the snake forward
 function moveSnake() {
     const head = { x: snake[0].x + dx, y: snake[0].y + dy };
     snake.unshift(head);
 
-    // Check if snake ate the food
     if (head.x === food.x && head.y === food.y) {
         score += 10;
         document.getElementById("score").innerText = "Score: " + score;
         generateFood();
     } else {
-        snake.pop(); // Remove tail if it didn't eat food
+        snake.pop(); 
     }
 }
 
-// Generate random food position
 function generateFood() {
     food.x = Math.floor(Math.random() * tileCount);
     food.y = Math.floor(Math.random() * tileCount);
-    
-    // Ensure food doesn't spawn on top of the snake
     snake.forEach(part => {
         if (part.x === food.x && part.y === food.y) generateFood();
     });
 }
 
-// Draw food
 function drawFood() {
-    ctx.fillStyle = "#FF5252"; // Red food
+    ctx.fillStyle = "#FF5252"; 
     ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 2, gridSize - 2);
 }
 
-// Control handling
-document.addEventListener("keydown", changeDirection);
+// Keyboard Controls (Just in case)
+document.addEventListener("keydown", (e) => handleDirection(e.keyCode));
 
-function changeDirection(event) {
-    const keyPressed = event.keyCode;
+// Mobile Touch Controls
+document.getElementById("upBtn").addEventListener("click", () => handleDirection(38));
+document.getElementById("downBtn").addEventListener("click", () => handleDirection(40));
+document.getElementById("leftBtn").addEventListener("click", () => handleDirection(37));
+document.getElementById("rightBtn").addEventListener("click", () => handleDirection(39));
+
+function handleDirection(keyCode) {
     const goingUp = dy === -1;
     const goingDown = dy === 1;
     const goingRight = dx === 1;
     const goingLeft = dx === -1;
 
-    if (keyPressed === 37 && !goingRight) { dx = -1; dy = 0; } // Left arrow
-    if (keyPressed === 38 && !goingDown) { dx = 0; dy = -1; }  // Up arrow
-    if (keyPressed === 39 && !goingLeft) { dx = 1; dy = 0; }   // Right arrow
-    if (keyPressed === 40 && !goingUp) { dx = 0; dy = 1; }     // Down arrow
+    if (keyCode === 37 && !goingRight) { dx = -1; dy = 0; } 
+    if (keyCode === 38 && !goingDown) { dx = 0; dy = -1; }  
+    if (keyCode === 39 && !goingLeft) { dx = 1; dy = 0; }   
+    if (keyCode === 40 && !goingUp) { dx = 0; dy = 1; }     
 }
 
-// Collision checking
 function hasGameEnded() {
-    // Wall collisions
     if (snake[0].x < 0 || snake[0].x >= tileCount || snake[0].y < 0 || snake[0].y >= tileCount) return true;
-    
-    // Self collisions
     for (let i = 1; i < snake.length; i++) {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true;
     }
     return false;
 }
 
-// Reset Game
 function resetGame() {
+    clearInterval(gameInterval);
     snake = [{ x: 10, y: 10 }];
     food = { x: 5, y: 5 };
     dx = 1;
     dy = 0;
     score = 0;
     document.getElementById("score").innerText = "Score: " + score;
-    main();
+    generateFood();
+    gameInterval = setInterval(main, 150); // Speed set to 150ms for mobile playability
 }
 
-// Start the game
+// Start
 generateFood();
-main();
+gameInterval = setInterval(main, 150);
