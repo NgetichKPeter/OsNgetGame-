@@ -5,25 +5,62 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
+    touch-action: manipulation; /* Prevents double-tap zoom delay */
 }
 
 .game-container {
     text-align: center;
+    padding: 10px;
 }
 
 h1 {
-    margin-bottom: 10px;
+    margin: 5px 0;
+    font-size: 24px;
 }
 
 #score {
-    font-size: 24px;
-    margin-bottom: 20px;
+    font-size: 20px;
+    margin-bottom: 10px;
 }
 
 canvas {
     border: 4px solid #fff;
     background-color: #000;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    max-width: 100%; /* Makes sure it fits on mobile screens */
+    height: auto;
+}
+
+/* Mobile D-Pad Styling */
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px;
+}
+
+.middle-row {
+    display: flex;
+    justify-content: space-between;
+    width: 140px;
+    margin: 5px 0;
+}
+
+.btn {
+    width: 60px;
+    height: 60px;
+    background-color: #333;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+}
+
+.btn:active {
+    background-color: #4CAF50; /* Turns green when tapped */
 }
