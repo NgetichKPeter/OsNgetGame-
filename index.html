@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>OsNgetGame - Snake</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -10,7 +10,16 @@
     <div class="game-container">
         <h1>OsNgetGame</h1>
         <div id="score">Score: 0</div>
-        <canvas id="gameCanvas" width="400" height="400"></canvas>
+        <canvas id="gameCanvas" width="300" height="300"></canvas>
+        
+        <div class="controls">
+            <button class="btn" id="upBtn">▲</button>
+            <div class="middle-row">
+                <button class="btn" id="leftBtn">◀</button>
+                <button class="btn" id="rightBtn">▶</button>
+            </div>
+            <button class="btn" id="downBtn">▼</button>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
